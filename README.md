@@ -175,7 +175,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: lucasvtiradentes/tscanner-action@v0.0.22
+      - uses: lucasvtiradentes/tscanner-action@v0.0.23
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -202,7 +202,7 @@ jobs:
     <td>
 
 ```yaml
-- uses: lucasvtiradentes/tscanner-action@v0.0.22
+- uses: lucasvtiradentes/tscanner-action@v0.0.23
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -211,7 +211,7 @@ jobs:
     <td>
 
 ```yaml
-- uses: lucasvtiradentes/tscanner-action@v0.0.22
+- uses: lucasvtiradentes/tscanner-action@v0.0.23
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     target-branch: 'origin/main'
@@ -250,7 +250,7 @@ jobs:
       checks: write
     steps:
       - uses: actions/checkout@v4
-      - uses: lucasvtiradentes/tscanner-action@v0.0.22
+      - uses: lucasvtiradentes/tscanner-action@v0.0.23
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -265,7 +265,7 @@ Without `checks: write`, annotations will only appear on lines that are part of 
 Scan but don't fail the workflow:
 
 ```yaml
-- uses: lucasvtiradentes/tscanner-action@v0.0.22
+- uses: lucasvtiradentes/tscanner-action@v0.0.23
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     continue-on-error: 'true'
@@ -279,7 +279,7 @@ Scan but don't fail the workflow:
 Primary grouping by rule instead of file:
 
 ```yaml
-- uses: lucasvtiradentes/tscanner-action@v0.0.22
+- uses: lucasvtiradentes/tscanner-action@v0.0.23
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     group-by: 'rule'
@@ -293,7 +293,7 @@ Primary grouping by rule instead of file:
 Use non-standard config location:
 
 ```yaml
-- uses: lucasvtiradentes/tscanner-action@v0.0.22
+- uses: lucasvtiradentes/tscanner-action@v0.0.23
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     config-path: 'config/tscanner'
@@ -307,7 +307,7 @@ Use non-standard config location:
 Pin to exact CLI version:
 
 ```yaml
-- uses: lucasvtiradentes/tscanner-action@v0.0.22
+- uses: lucasvtiradentes/tscanner-action@v0.0.23
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     tscanner-version: '0.1.5'
@@ -321,7 +321,7 @@ Pin to exact CLI version:
 Skip inline annotations in PR diff:
 
 ```yaml
-- uses: lucasvtiradentes/tscanner-action@v0.0.22
+- uses: lucasvtiradentes/tscanner-action@v0.0.23
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     annotations: 'false'
@@ -344,7 +344,7 @@ Cache pnpm store for faster subsequent runs:
     node-version: '20'
     cache: 'pnpm'
 
-- uses: lucasvtiradentes/tscanner-action@v0.0.22
+- uses: lucasvtiradentes/tscanner-action@v0.0.23
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -357,7 +357,7 @@ Cache pnpm store for faster subsequent runs:
 All options:
 
 ```yaml
-- uses: lucasvtiradentes/tscanner-action@v0.0.22
+- uses: lucasvtiradentes/tscanner-action@v0.0.23
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     target-branch: 'origin/develop'
@@ -379,15 +379,15 @@ To scan your code, you need to set up the rules in the TScanner config folder. H
 
 1. **VSCode Extension**: TScanner icon in the status bar → `Manage Rules` → Select desired rules → `Save`
 2. **CLI**: Run `tscanner init` in your project root
-3. **Manual**: Copy the default config below to `.tscanner/config.json`
+3. **Manual**: Copy the default config below to `.tscanner/config.jsonc`
 
 The default configuration is:
 
 ```json
 {
-  "$schema": "https://unpkg.com/tscanner@0.0.25/schema.json",
+  "$schema": "https://unpkg.com/tscanner@0.0.26/schema.json",
   "builtinRules": {
-    "no-any-type": {}
+    "no-explicit-any": {}
   },
   "customRules": {},
   "files": {
@@ -406,18 +406,20 @@ The default configuration is:
       "**/.git/**"
     ]
   },
-  "lsp": {
-    "errors": true,
-    "warnings": false
+  "codeEditor": {
+    "highlightErrors": true,
+    "highlightWarnings": false,
+    "scanIntervalSeconds": 0
   },
   "cli": {
     "groupBy": "file",
     "noCache": false,
-    "showSeverity": true,
-    "showSourceLine": true,
-    "showRuleName": true,
-    "showDescription": false,
-    "showSummaryAtFooter": true
+    "showSettings": true,
+    "showIssueSeverity": true,
+    "showIssueSourceLine": true,
+    "showIssueRuleName": true,
+    "showIssueDescription": false,
+    "showSummary": true
   }
 }
 ```
@@ -425,7 +427,7 @@ The default configuration is:
 **Inline Disables:**
 
 ```typescript
-// tscanner-disable-next-line no-any-type
+// tscanner-disable-next-line no-explicit-any
 const data: any = fetchData();
 
 // tscanner-disable-file
@@ -442,7 +444,7 @@ All configuration fields are **optional** with sensible defaults. The minimum re
 ```json
 {
   "builtinRules": {
-    "no-any-type": {}
+    "no-explicit-any": {}
   }
 }
 ```
@@ -459,8 +461,8 @@ Example with per-rule file patterns:
 ```json
 {
   "builtinRules": {
-    "no-any-type": {},
-    "no-console-log": {
+    "no-explicit-any": {},
+    "no-console": {
       "exclude": ["src/utils/logger.ts"]
     },
     "max-function-length": {
@@ -471,8 +473,8 @@ Example with per-rule file patterns:
 ```
 
 This config:
-- Runs `no-any-type` on all files (uses global `files` patterns)
-- Runs `no-console-log` on all files except `src/utils/logger.ts`
+- Runs `no-explicit-any` on all files (uses global `files` patterns)
+- Runs `no-console` on all files except `src/utils/logger.ts`
 - Runs `max-function-length` only on files inside `src/core/`
 
 </details>
@@ -494,7 +496,7 @@ Customize TScanner to validate what matters to your project while maintaining co
   <tr>
     <td><b><a href="packages/core/crates/core/src/rules">Built-in</a></b></td>
     <td>38 ready-to-use AST rules</td>
-    <td><code>no-any-type</code>, <code>prefer-const</code>, <code>no-console-log</code></td>
+    <td><code>no-explicit-any</code>, <code>prefer-const</code>, <code>no-console</code></td>
   </tr>
   <tr>
     <td><b>Regex</b></td>
@@ -534,7 +536,7 @@ Customize TScanner to validate what matters to your project while maintaining co
     <th width="100">Also in</th>
   </tr>
   <tr>
-    <td align="left"><div align="center"><a href="https://github.com/lucasvtiradentes/tscanner/blob/main/packages/core/crates/core/src/rules/no_any_type.rs"><code>no-any-type</code></a><br/><br/><img src="https://img.shields.io/badge/ts--only-3178C6?logo=typescript&logoColor=white" alt="TypeScript only"></div></td>
+    <td align="left"><div align="center"><a href="https://github.com/lucasvtiradentes/tscanner/blob/main/packages/core/crates/core/src/rules/no_explicit_any.rs"><code>no-explicit-any</code></a><br/><br/><img src="https://img.shields.io/badge/ts--only-3178C6?logo=typescript&logoColor=white" alt="TypeScript only"></div></td>
     <td align="left">Detects usage of TypeScript 'any' type (<code>: any</code> and <code>as any</code>). Using 'any' defeats the purpose of TypeScript's type system.</td>
     <td align="left"><a href="https://typescript-eslint.io/rules/no-explicit-any"><img src="https://img.shields.io/badge/-ESLint-4B32C3?logo=eslint&logoColor=white" alt="ESLint"></a> <a href="https://biomejs.dev/linter/rules/no-explicit-any"><img src="https://img.shields.io/badge/-Biome-60A5FA?logo=biome&logoColor=white" alt="Biome"></a></td>
   </tr>
@@ -593,8 +595,8 @@ Customize TScanner to validate what matters to your project while maintaining co
     <td align="left"><a href="https://eslint.org/docs/latest/rules/require-await"><img src="https://img.shields.io/badge/-ESLint-4B32C3?logo=eslint&logoColor=white" alt="ESLint"></a> <a href="https://biomejs.dev/linter/rules/use-await"><img src="https://img.shields.io/badge/-Biome-60A5FA?logo=biome&logoColor=white" alt="Biome"></a></td>
   </tr>
   <tr>
-    <td align="left"><div align="center"><a href="https://github.com/lucasvtiradentes/tscanner/blob/main/packages/core/crates/core/src/rules/no_console_log.rs"><code>no-console-log</code></a><br/><br/><img src="https://img.shields.io/badge/regex--rule-6C757D" alt="Regex rule"></div></td>
-    <td align="left">Finds console.log() statements in code. Console statements should be removed before committing to production.</td>
+    <td align="left"><div align="center"><a href="https://github.com/lucasvtiradentes/tscanner/blob/main/packages/core/crates/core/src/rules/no_console.rs"><code>no-console</code></a><br/><br/><img src="https://img.shields.io/badge/regex--rule-6C757D" alt="Regex rule"></div></td>
+    <td align="left">Disallow the use of console methods. Console statements should be removed before committing to production.</td>
     <td align="left"><a href="https://eslint.org/docs/latest/rules/no-console"><img src="https://img.shields.io/badge/-ESLint-4B32C3?logo=eslint&logoColor=white" alt="ESLint"></a> <a href="https://biomejs.dev/linter/rules/no-console"><img src="https://img.shields.io/badge/-Biome-60A5FA?logo=biome&logoColor=white" alt="Biome"></a></td>
   </tr>
   <tr>
@@ -932,8 +934,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 This repository is automatically generated. If you want to contribute or see the source code, you can find it in the [TScanner monorepo](https://github.com/lucasvtiradentes/tscanner/tree/main/packages/github-action).
 
-- **Current version:** `v0.0.22`
-- **Generated at:** `2025-11-30T06:22:32Z`
+- **Current version:** `v0.0.23`
+- **Generated at:** `2025-11-30T22:15:35Z`
 
 <a href="#"><img src="https://cdn.jsdelivr.net/gh/lucasvtiradentes/tscanner@main/.github/image/divider.png" /></a>
 
