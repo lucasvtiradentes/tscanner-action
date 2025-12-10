@@ -154,7 +154,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: lucasvtiradentes/tscanner-action@v0.0.28
+      - uses: lucasvtiradentes/tscanner-action@v0.0.29
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -323,7 +323,7 @@ jobs:
           mkdir -p ~/.claude
           echo '${{ secrets.CLAUDE_CREDENTIALS }}' > ~/.claude/.credentials.json
 
-      - uses: lucasvtiradentes/tscanner-action@v0.0.28
+      - uses: lucasvtiradentes/tscanner-action@v0.0.29
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           ai-mode: include
@@ -372,7 +372,7 @@ jobs:
           echo '${{ secrets.GEMINI_CREDENTIALS }}' > ~/.gemini/oauth_creds.json
           echo '{"security":{"auth":{"selectedType":"oauth-personal"}}}' > ~/.gemini/settings.json
 
-      - uses: lucasvtiradentes/tscanner-action@v0.0.28
+      - uses: lucasvtiradentes/tscanner-action@v0.0.29
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           ai-mode: include
@@ -410,7 +410,7 @@ jobs:
           mkdir -p ~/.claude
           echo '${{ secrets.CLAUDE_CREDENTIALS }}' > ~/.claude/.credentials.json
 
-      - uses: lucasvtiradentes/tscanner-action@v0.0.28
+      - uses: lucasvtiradentes/tscanner-action@v0.0.29
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           ai-mode: only
@@ -449,7 +449,7 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
-      - uses: lucasvtiradentes/tscanner-action@v0.0.28
+      - uses: lucasvtiradentes/tscanner-action@v0.0.29
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           target-branch: 'origin/main'        # omit to scan full codebase
@@ -481,7 +481,7 @@ To scan your code, you need to set up the rules in the TScanner config folder. H
 
 ```json
 {
-  "$schema": "https://unpkg.com/tscanner@0.0.31/schema.json",
+  "$schema": "https://unpkg.com/tscanner@0.0.32/schema.json",
   "files": {
     "include": [
       "**/*.ts",
@@ -489,18 +489,23 @@ To scan your code, you need to set up the rules in the TScanner config folder. H
       "**/*.js",
       "**/*.jsx",
       "**/*.mjs",
-      "**/*.cjs"
+      "**/*.cjs",
+      "**/*mts",
+      "**/*cts"
     ],
     "exclude": [
       "**/node_modules/**",
       "**/dist/**",
       "**/build/**",
-      "**/.git/**"
+      "**/.git/**",
+      "**/.next/**"
     ]
   },
   "codeEditor": {
     "highlightErrors": true,
-    "highlightWarnings": false,
+    "highlightWarnings": true,
+    "highlightInfos": true,
+    "highlightHints": true,
     "scanInterval": 0,
     "aiScanInterval": 0
   }
@@ -1199,8 +1204,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 This repository is automatically generated. If you want to contribute or see the source code, you can find it in the [TScanner monorepo](https://github.com/lucasvtiradentes/tscanner/tree/main/packages/github-action).
 
-- **Current version:** `v0.0.28`
-- **Generated at:** `2025-12-09T12:43:06Z`
+- **Current version:** `v0.0.29`
+- **Generated at:** `2025-12-10T06:56:32Z`
 
 <a href="#"><img src="https://cdn.jsdelivr.net/gh/lucasvtiradentes/tscanner@main/.github/image/divider.png" /></a>
 
