@@ -104,7 +104,7 @@ TScanner lets you define those rules once. Every AI-generated file, every PR, ev
 Here is a diagram that shows how TScanner fits into the coding workflow:
 
 <div align="center">
-  <img width="80%" src="https://cdn.jsdelivr.net/gh/lucasvtiradentes/tscanner@main/.github/image/tscanner-and-the-coding-workflow.png" alt="TScanner and the coding workflow">
+  <img src="https://cdn.jsdelivr.net/gh/lucasvtiradentes/tscanner@main/.github/image/tscanner-and-the-coding-workflow.png" alt="TScanner and the coding workflow">
   <br>
   <em>TScanner and the coding workflow</em>
 </div>
@@ -118,7 +118,7 @@ Legend:
 So what? 
 
 - this will allow you to go fast plus knowing exactly what issues you need to fix before merging or committing.
-- this will reduce to zero the rejected pr's due to **styling or poor code quality patterns**.
+- this will, over time, reduce to zero the rejected pr's due to **styling or poor code quality patterns**, as long as you keep the rules updated.
 
 <div align="center">
 
@@ -173,7 +173,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: lucasvtiradentes/tscanner-action@v0.0.34
+      - uses: lucasvtiradentes/tscanner-action@v0.0.35
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -347,7 +347,7 @@ jobs:
       - name: Setup Claude CLI
         run: npm install -g @anthropic-ai/claude-code
 
-      - uses: lucasvtiradentes/tscanner-action@v0.0.34
+      - uses: lucasvtiradentes/tscanner-action@v0.0.35
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         with:
@@ -400,7 +400,7 @@ jobs:
           echo '${{ secrets.GEMINI_CREDENTIALS }}' > ~/.gemini/oauth_creds.json
           echo '{"security":{"auth":{"selectedType":"oauth-personal"}}}' > ~/.gemini/settings.json
 
-      - uses: lucasvtiradentes/tscanner-action@v0.0.34
+      - uses: lucasvtiradentes/tscanner-action@v0.0.35
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           ai-mode: include
@@ -440,7 +440,7 @@ jobs:
       - name: Setup Claude CLI
         run: npm install -g @anthropic-ai/claude-code
 
-      - uses: lucasvtiradentes/tscanner-action@v0.0.34
+      - uses: lucasvtiradentes/tscanner-action@v0.0.35
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         with:
@@ -468,7 +468,7 @@ TScanner caches scan results between runs for faster execution. For caching to w
 - name: Restore file mtimes for cache
   uses: chetan/git-restore-mtime-action@v2
 
-- uses: lucasvtiradentes/tscanner-action@v0.0.34
+- uses: lucasvtiradentes/tscanner-action@v0.0.35
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -496,7 +496,7 @@ jobs:
       - name: Restore file mtimes for cache
         uses: chetan/git-restore-mtime-action@v2
 
-      - uses: lucasvtiradentes/tscanner-action@v0.0.34
+      - uses: lucasvtiradentes/tscanner-action@v0.0.35
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           target-branch: 'origin/main'        # omit to scan full codebase
@@ -1314,8 +1314,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 This repository is automatically generated. If you want to contribute or see the source code, you can find it in the [TScanner monorepo](https://github.com/lucasvtiradentes/tscanner/tree/main/packages/github-action).
 
-- **Current version:** `v0.0.34`
-- **Generated at:** `2025-12-15T03:12:24Z`
+- **Current version:** `v0.0.35`
+- **Generated at:** `2025-12-15T04:05:36Z`
 
 <a href="#"><img src="https://cdn.jsdelivr.net/gh/lucasvtiradentes/tscanner@main/.github/image/divider.png" /></a>
 
