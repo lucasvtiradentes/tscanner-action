@@ -178,7 +178,7 @@ We use TScanner to maintain this very codebase. Here's our setup:
 - [`no-dead-code`](https://github.com/lucasvtiradentes/tscanner/blob/main/.tscanner/ai-rules/no-dead-code.md): Detect dead code patterns in Rust executors
 - [`find-enum-candidates`](https://github.com/lucasvtiradentes/tscanner/blob/main/.tscanner/ai-rules/find-enum-candidates.md): Find type unions that could be enums
 
-> 💡 Check the [`.tscanner/`](https://github.com/lucasvtiradentes/tscanner/tree/main/.tscanner) folder to see the full config and script implementations.
+> TIP: Check the [`.tscanner/`](https://github.com/lucasvtiradentes/tscanner/tree/main/.tscanner) folder to see the full config and script implementations.
 
 </div>
 </details>
@@ -269,10 +269,10 @@ npm install -D tscanner
 2. Initialize configuration
 
 ```bash
-tscanner init
+npx tscanner init
 ```
 
-> TIP: Use `tscanner init --full` for a [complete config](https://github.com/lucasvtiradentes/tscanner/blob/main/assets/configs/full.json) with example regex, script, and AI rules.
+> TIP: Use `npx tscanner init --full` for a [complete config](https://github.com/lucasvtiradentes/tscanner/blob/main/assets/configs/full.json) with example regex, script, and AI rules.
 
 
 <!-- </DYNFIELD:QUICK_START_INSTALL> -->
@@ -291,7 +291,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: lucasvtiradentes/tscanner-action@v0.1.1
+      - uses: lucasvtiradentes/tscanner-action@v0.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -465,7 +465,7 @@ jobs:
       - name: Setup Claude CLI
         run: npm install -g @anthropic-ai/claude-code
 
-      - uses: lucasvtiradentes/tscanner-action@v0.1.1
+      - uses: lucasvtiradentes/tscanner-action@v0.1.2
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         with:
@@ -518,7 +518,7 @@ jobs:
           echo '${{ secrets.GEMINI_CREDENTIALS }}' > ~/.gemini/oauth_creds.json
           echo '{"security":{"auth":{"selectedType":"oauth-personal"}}}' > ~/.gemini/settings.json
 
-      - uses: lucasvtiradentes/tscanner-action@v0.1.1
+      - uses: lucasvtiradentes/tscanner-action@v0.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           ai-mode: include
@@ -558,7 +558,7 @@ jobs:
       - name: Setup Claude CLI
         run: npm install -g @anthropic-ai/claude-code
 
-      - uses: lucasvtiradentes/tscanner-action@v0.1.1
+      - uses: lucasvtiradentes/tscanner-action@v0.1.2
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         with:
@@ -586,7 +586,7 @@ TScanner caches scan results between runs for faster execution. For caching to w
 - name: Restore file mtimes for cache
   uses: chetan/git-restore-mtime-action@v2
 
-- uses: lucasvtiradentes/tscanner-action@v0.1.1
+- uses: lucasvtiradentes/tscanner-action@v0.1.2
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -614,7 +614,7 @@ jobs:
       - name: Restore file mtimes for cache
         uses: chetan/git-restore-mtime-action@v2
 
-      - uses: lucasvtiradentes/tscanner-action@v0.1.1
+      - uses: lucasvtiradentes/tscanner-action@v0.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           target-branch: 'origin/main'        # omit to scan full codebase
@@ -806,28 +806,28 @@ Rules are the core of TScanner. They define what to check, where to check, and h
 <table>
   <tr>
     <th width="100">Type</th>
-    <th width="250">Use Case</th>
-    <th width="400">Example</th>
+    <th width="350">Use Case</th>
+    <th width="300">Example</th>
   </tr>
   <tr>
     <td><b>Built-in</b></td>
-    <td>38 ready-to-use AST rules</td>
+    <td>Common typescript anti-patterns</td>
     <td><code>no-explicit-any</code>, <code>prefer-const</code>, <code>no-console</code></td>
   </tr>
   <tr>
     <td><b>Regex</b></td>
     <td>Simple text patterns for any file</td>
-    <td>Match <code>TODO</code> comments, banned imports, naming conventions</td>
+    <td>Match <code>TODO</code> comments, banned imports</td>
   </tr>
   <tr>
     <td><b>Script</b></td>
     <td>Complex logic in any language (TS, Python, Rust, Go...)</td>
-    <td>Validate file naming, check if tests exist, enforce folder structure, type parity checks</td>
+    <td>Enforce folder structure, type parity checks, enforce min/max lines per file</td>
   </tr>
   <tr>
     <td><b>AI</b></td>
-    <td>Semantic validation via prompts</td>
-    <td>Enforce React Hook Form usage, validate API integration patterns with SWR/TanStack</td>
+    <td>LLM-powered analysis for context-aware patterns (dead code, enum candidates, architectural violations)</td>
+    <td>Detect potential enum candidates, check if a complex pattern was followed across multiple files</td>
   </tr>
 </table>
 
@@ -1452,33 +1452,64 @@ Detect dead code patterns.
 <!-- <DYNFIELD:REGISTRY> -->
 ## 📦 Registry<a href="#TOC"><img align="right" src="https://cdn.jsdelivr.net/gh/lucasvtiradentes/tscanner@main/.github/image/up_arrow.png" width="22"></a>
 
-The registry is a collection of community rules ready to install with a single command. No need to write rules from scratch.
+The registry is a collection of community rules ready to install with a single command.
 
 ```bash
-tscanner registry                     # List all available rules
-tscanner registry no-long-files       # Install a specific rule
-tscanner registry --kind script       # Filter by type (ai, script, regex)
-tscanner registry --category security # Filter by category
-tscanner registry --latest            # Use rules from main branch instead of current version
+npx tscanner registry                     # List all available rules (and you chose the ones you want to install)
+npx tscanner registry no-long-files       # Install a specific rule
+npx tscanner registry --kind script       # Filter by type (ai, script, regex)
+npx tscanner registry --category security # Filter by category
+npx tscanner registry --latest            # Use rules from main branch instead of current version
 ```
 
 <div align="center">
 
 **Available rules (5)**
 
-| Rule | Type | Language | Description |
-|------|------|----------|-------------|
-| [`find-enum-candidates`](https://github.com/lucasvtiradentes/tscanner/blob/main/registry/ai-rules/find-enum-candidates/prompt.md) | <img src="https://img.shields.io/badge/ai-8B5CF6" alt="ai"> | <img src="https://img.shields.io/badge/Markdown-083fa1?logo=markdown&logoColor=white" alt="Markdown"> | Find string literal unions that could be replaced with enums |
-| [`no-long-files`](https://github.com/lucasvtiradentes/tscanner/blob/main/registry/script-rules/no-long-files/script.ts) | <img src="https://img.shields.io/badge/script-10B981" alt="script"> | <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript"> | Enforce maximum lines per file limit |
-| [`no-empty-files`](https://github.com/lucasvtiradentes/tscanner/blob/main/registry/script-rules/no-empty-files/script.py) | <img src="https://img.shields.io/badge/script-10B981" alt="script"> | <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white" alt="Python"> | Enforce minimum lines per file |
-| [`no-fixme-comments`](https://github.com/lucasvtiradentes/tscanner/blob/main/registry/script-rules/no-fixme-comments/script.rs) | <img src="https://img.shields.io/badge/script-10B981" alt="script"> | <img src="https://img.shields.io/badge/Rust-DEA584?logo=rust&logoColor=white" alt="Rust"> | Disallow FIXME/XXX comments in code |
-| [`no-process-env`](https://github.com/lucasvtiradentes/tscanner/blob/main/registry/regex-rules/no-process-env/config.jsonc) | <img src="https://img.shields.io/badge/regex-6C757D" alt="regex"> | - | Disallow direct process.env access |
+<table>
+  <tr>
+    <th width="33%">Rule</th>
+    <th width="17%">Type</th>
+    <th width="17%">Language</th>
+    <th width="33%">Description</th>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/lucasvtiradentes/tscanner/blob/main/registry/ai-rules/find-enum-candidates/prompt.md"><code>find-enum-candidates</code></a></td>
+    <td><img src="https://img.shields.io/badge/ai-8B5CF6" alt="ai"></td>
+    <td><img src="https://img.shields.io/badge/Markdown-083fa1?logo=markdown&logoColor=white" alt="Markdown"></td>
+    <td>Find string literal unions that could be replaced with enums</td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/lucasvtiradentes/tscanner/blob/main/registry/script-rules/no-long-files/script.ts"><code>no-long-files</code></a></td>
+    <td><img src="https://img.shields.io/badge/script-10B981" alt="script"></td>
+    <td><img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript"></td>
+    <td>Enforce maximum lines per file limit</td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/lucasvtiradentes/tscanner/blob/main/registry/script-rules/no-empty-files/script.py"><code>no-empty-files</code></a></td>
+    <td><img src="https://img.shields.io/badge/script-10B981" alt="script"></td>
+    <td><img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white" alt="Python"></td>
+    <td>Enforce minimum lines per file</td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/lucasvtiradentes/tscanner/blob/main/registry/script-rules/no-fixme-comments/script.rs"><code>no-fixme-comments</code></a></td>
+    <td><img src="https://img.shields.io/badge/script-10B981" alt="script"></td>
+    <td><img src="https://img.shields.io/badge/Rust-DEA584?logo=rust&logoColor=white" alt="Rust"></td>
+    <td>Disallow FIXME/XXX comments in code</td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/lucasvtiradentes/tscanner/blob/main/registry/regex-rules/no-process-env/config.jsonc"><code>no-process-env</code></a></td>
+    <td><img src="https://img.shields.io/badge/regex-6C757D" alt="regex"></td>
+    <td>-</td>
+    <td>Disallow direct process.env access</td>
+  </tr>
+</table>
 
 </div>
 
 <br />
 
-> 💡 **Want to share your rule?** Open a PR adding your rule to the [`registry/`](https://github.com/lucasvtiradentes/tscanner/tree/main/registry) folder. Once merged, everyone can install it with `tscanner registry your-rule-name`.
+> **Want to share your rule?** Open a PR adding your rule to the [`registry/`](https://github.com/lucasvtiradentes/tscanner/tree/main/registry) folder. Once merged, everyone can install it with `npx tscanner registry your-rule-name`.
 
 <!-- </DYNFIELD:REGISTRY> -->
 
@@ -1567,8 +1598,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 This repository is automatically generated. If you want to contribute or see the source code, you can find it in the [TScanner monorepo](https://github.com/lucasvtiradentes/tscanner/tree/main/packages/github-action).
 
-- **Current version:** `v0.1.1`
-- **Generated at:** `2025-12-16T06:58:59Z`
+- **Current version:** `v0.1.2`
+- **Generated at:** `2025-12-16T12:33:47Z`
 
 <a href="#"><img src="https://cdn.jsdelivr.net/gh/lucasvtiradentes/tscanner@main/.github/image/divider.png" /></a>
 
