@@ -291,7 +291,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: lucasvtiradentes/tscanner-action@v0.1.0
+      - uses: lucasvtiradentes/tscanner-action@v0.1.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -465,7 +465,7 @@ jobs:
       - name: Setup Claude CLI
         run: npm install -g @anthropic-ai/claude-code
 
-      - uses: lucasvtiradentes/tscanner-action@v0.1.0
+      - uses: lucasvtiradentes/tscanner-action@v0.1.1
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         with:
@@ -518,7 +518,7 @@ jobs:
           echo '${{ secrets.GEMINI_CREDENTIALS }}' > ~/.gemini/oauth_creds.json
           echo '{"security":{"auth":{"selectedType":"oauth-personal"}}}' > ~/.gemini/settings.json
 
-      - uses: lucasvtiradentes/tscanner-action@v0.1.0
+      - uses: lucasvtiradentes/tscanner-action@v0.1.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           ai-mode: include
@@ -558,7 +558,7 @@ jobs:
       - name: Setup Claude CLI
         run: npm install -g @anthropic-ai/claude-code
 
-      - uses: lucasvtiradentes/tscanner-action@v0.1.0
+      - uses: lucasvtiradentes/tscanner-action@v0.1.1
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         with:
@@ -586,7 +586,7 @@ TScanner caches scan results between runs for faster execution. For caching to w
 - name: Restore file mtimes for cache
   uses: chetan/git-restore-mtime-action@v2
 
-- uses: lucasvtiradentes/tscanner-action@v0.1.0
+- uses: lucasvtiradentes/tscanner-action@v0.1.1
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -614,7 +614,7 @@ jobs:
       - name: Restore file mtimes for cache
         uses: chetan/git-restore-mtime-action@v2
 
-      - uses: lucasvtiradentes/tscanner-action@v0.1.0
+      - uses: lucasvtiradentes/tscanner-action@v0.1.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           target-branch: 'origin/main'        # omit to scan full codebase
@@ -1567,8 +1567,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 This repository is automatically generated. If you want to contribute or see the source code, you can find it in the [TScanner monorepo](https://github.com/lucasvtiradentes/tscanner/tree/main/packages/github-action).
 
-- **Current version:** `v0.1.0`
-- **Generated at:** `2025-12-16T06:00:04Z`
+- **Current version:** `v0.1.1`
+- **Generated at:** `2025-12-16T06:58:59Z`
 
 <a href="#"><img src="https://cdn.jsdelivr.net/gh/lucasvtiradentes/tscanner@main/.github/image/divider.png" /></a>
 
